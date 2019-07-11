@@ -1,3 +1,5 @@
+.PHONY: all
+all: waveform.h5
 
 # PE 是 photoelectron 即光电子。
 # SPE 是 single PE 即单光电子。
