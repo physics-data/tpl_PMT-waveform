@@ -50,6 +50,8 @@ $y(t)=x(t)*h(t)$
 
 其中第一列是`EventID`记录事件数，第二列`ChannelID`记录通道数，每一个事件对应有30个通道(PMT)，因为实际探测过程中有30个PMT在工作，而每个PMT记录到的对应光子数实际上可能有多个。
 
+你需要注意的问题是某个事件中，并不是所有Channel都有记录，所以某个事件中可能不足30个PMT的Channel.因此你不必计算那些没有记录的Channel.
+
 第三列`PETime`是光子入射时间，第四列`Weight`是权重，提供的样例数据中给出的权重是1，实际最后测试时使用的数据并不一定是1，可能是其它值。
 
 比如对于第3个事件，第0个PMT上在276，286，303上有光子入射进来，那么你需要把这三个光子产生的响应叠加在一起，使用之前所说的卷积公式(实际上就是平移叠加)，你就能够产生对应的波形了。
@@ -73,11 +75,11 @@ $y(t)=x(t)*h(t)$
 |  task-C          | 10 |
 |  实验报告         | 5  |
 
-`superimpose.py`读取`SPE.H5`与`PE-info.h5`生成`ideal-waveform.h5`，同学们生成的文件中应该包含对应channel数目N的波形，写成一个大小为N*1029的矩阵，以dataset存入HDF5文件的根目录中。dataset的命名为`waveformIdeal`.
+`superimpose.py`读取`SPE.H5`与`PE-info.h5`生成`ideal-waveform.h5`，同学们生成的文件中应该包含对应channel数目N的波形，写成一个大小为N*1029的矩阵，以dataset存入HDF5文件的根目录中。dataset的命名为`WaveformIdeal`.
 
 `task-A`需要大家在同一张图上画出两个图像(subplot)，第一张图为单光电子波形`SPE`，第二张图上绘制任意一个channel的波形。注意标注横纵坐标的标签，图的标题。图的文件名命名为`task-A.png`.
 
-`noise-sample.py`读取`noise-level.csv`生成`noise.h5`，同学们生成的文件中应该包含对应channel数目N的波形，写成一个大小为N*1029的矩阵，以dataset存入HDF5文件的根目录中。dataset的命名为`Noise`.
+`noise-sample.py`读取`noise-level.csv`生成`noise.h5`，同学们生成的文件中应该包含对应channel数目N的波形，写成一个大小为N*1029的矩阵，以dataset存入HDF5文件的根目录中。dataset的命名为`Noise`.生成noise的思路需要写入实验报告中。
 
 `task-B`需要大家在同一张图上画出一个图像，图为任意一个channel的噪声波形。注意标注横纵坐标的标签，图的标题。图的文件名命名为`task-B.png`.
 
@@ -86,5 +88,7 @@ $y(t)=x(t)*h(t)$
 `task-C`需要大家在同一张图上画出两个图像(subplot)，选定某个channel，第一张图为无噪声波形，第二张图上绘制对应channel的有噪声波形。注意标注横纵坐标的标签，图的标题。图的文件名命名为`task-C.png`.
 
 实验报告需要写你在解决问题中的
+
 A.思路
+
 B.遇到的困难或问题
