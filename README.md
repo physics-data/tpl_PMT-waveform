@@ -63,6 +63,7 @@ $y(t)=x(t)*h(t)$
 
 作业分成以下几个部分，同学按规定完成对应任务即可拿到相应分数
 
+|   任务           | 分数|
 |------------------|----|
 |  superimpose.py  | 30 |
 |  task-A          | 10 |
@@ -74,15 +75,15 @@ $y(t)=x(t)*h(t)$
 
 `superimpose.py`读取`SPE.H5`与`PE-info.h5`生成`ideal-waveform.h5`，同学们生成的文件中应该包含对应channel数目N的波形，写成一个大小为N*1029的矩阵，以dataset存入HDF5文件的根目录中。dataset的命名为`waveformIdeal`.
 
-task-A需要大家在同一张图上画出两个图像(subplot)，第一张图为单光电子波形`SPE`，第二张图上绘制任意一个channel的波形。注意标注横纵坐标的标签，图的标题。图的文件名命名为`task-A.png`.
+`task-A`需要大家在同一张图上画出两个图像(subplot)，第一张图为单光电子波形`SPE`，第二张图上绘制任意一个channel的波形。注意标注横纵坐标的标签，图的标题。图的文件名命名为`task-A.png`.
 
 `noise-sample.py`读取`noise-level.csv`生成`noise.h5`，同学们生成的文件中应该包含对应channel数目N的波形，写成一个大小为N*1029的矩阵，以dataset存入HDF5文件的根目录中。dataset的命名为`Noise`.
 
-task-B需要大家在同一张图上画出一个图像，图为任意一个channel的噪声波形。注意标注横纵坐标的标签，图的标题。图的文件名命名为`task-B.png`.
+`task-B`需要大家在同一张图上画出一个图像，图为任意一个channel的噪声波形。注意标注横纵坐标的标签，图的标题。图的文件名命名为`task-B.png`.
 
 `add-noise.py`读取之前同学自己产生的数据`ideal-waveform.h5`和`noise.h5`生成`waveform.h5`，进行叠加处理后，以dataset存入HDF5文件的根目录中。dataset的命名为`waveformNoise`.
 
-task-C需要大家在同一张图上画出两个图像(subplot)，选定某个channel，第一张图为无噪声波形，第二张图上绘制对应channel的有噪声波形。注意标注横纵坐标的标签，图的标题。图的文件名命名为`task-C.png`.
+`task-C`需要大家在同一张图上画出两个图像(subplot)，选定某个channel，第一张图为无噪声波形，第二张图上绘制对应channel的有噪声波形。注意标注横纵坐标的标签，图的标题。图的文件名命名为`task-C.png`.
 
 实验报告需要写你在解决问题中的
 A.思路
