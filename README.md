@@ -87,7 +87,7 @@ $$
 
 #### `superimpose.py `
 
-读取 `SPE.H5` 与 `PE-info.h5` 生成 `ideal-waveform.h5`，对于每一个 Event $i$，应该包含对应 Channel 数目 $N_i \le 30​$ 的波形数据（长度规定为 1029 ns）。因此你需要构造一个新的数据类型，写入 HDF5 文件的 `WaveformIdeal` dataset 中，对应的表结构如下：
+读取 `SPE.h5` 与 `PE-info.h5` 生成 `ideal-waveform.h5`，对于每一个 Event $i$，应该包含对应 Channel 数目 $N_i \le 30​$ 的波形数据（长度规定为 1029 ns）。因此你需要构造一个新的数据类型，写入 HDF5 文件的 `WaveformIdeal` dataset 中，对应的表结构如下：
 
 | EventID | ChannelID | Waveform |
 | ------- | --------- | -------- |
@@ -130,6 +130,10 @@ $$
 ### 提高要求
 
 提高要求为加分项，至多可加 20 分。你可以自由发挥，一些可选项为：
+
+* 把单光电子(SPE)时间谱换为 [exGauss](https://en.wikipedia.org/wiki/Exponentially_modified_Gaussian_distribution) 形式，即高斯分布与指数分布的卷积。其中高斯部分的 $\sigma$ 取为 2.628ns，指数分布的 $\tau=1/\lambda$ 取为 7.833ns。
+* 令 *exGauss* 分布的 $\sigma$ 和 $\tau$ 也有少量随机变化，生成波形。
+* 给每个光电子的幅度 (Weight)，加上 30% 的服从高斯分布的随机涨落。
 
 * 在程序运行过程中输出友好的提示信息（如处理进度）
 * 增强程序的鲁棒性，添加完善的错误处理（如文件格式不正确、不存在文件、不存在对应波形等）
