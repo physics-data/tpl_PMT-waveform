@@ -18,7 +18,7 @@ $$
 
 ![h(t)](data/SPEResponse.png)
 
-你的任务就是重复上述的物理过程，将输入的入射光子波形x(t)转化成最后的波形。一个说明性的图示可见 `pipeline.pdf`。
+你的任务就是重复上述的物理过程，将输入的入射光子波形 $x(t)$ 转化成最后的波形。一个说明性的图示可见 `pipeline.pdf`。
 
 ## 数据说明
 
@@ -54,7 +54,7 @@ $$
 
 你需要注意的问题是某个事件中，并不是所有 Channel 都有记录，所以某个事件中可能不足30个PMT 的 Channel。你不必计算那些没有记录的 Channel。
 
-第三列 `PETime` 是光子入射时间，第四列 `Weight` 是权重，提供的样例数据中给出的权重是1，实际最后测试时使用的数据并不一定是1，可能是其它值。你需要将权重乘在单光电子响应 $h(t)$ 上，得到该探测器上得到的实际响应。
+第三列 `PETime` 是光子入射时间，第四列 `Weight` 是权重，提供的样例数据中给出的权重是1，实际最后测试时使用的数据并不一定是1，可能是其它值。你需要将权重乘在单光电子响应 $h(t)​$ 上，得到该探测器上得到的实际响应。
 
 比如对于第3个事件，第0个PMT上在 `PETime` 为 276，286，303 时上有光子入射进来，那么你需要把这三个光子产生的响应（分别成对应的权重后）叠加在一起，使用之前所说的卷积公式（实际上就是平移叠加），你就能够产生对应的波形了。
 
@@ -81,17 +81,17 @@ $$
 | add-noise.py    | 16   |
 | plot-real.py    | 8    |
 
-`superimpose.py  `读取 `SPE.H5` 与 `PE-info.h5` 生成 `ideal-waveform.h5`，同学们生成的文件中应该包含对应 channel 数目 $N​$ 的波形，写成一个大小为 $N*1029​$ 的矩阵，以 dataset 存入HDF5文件的根目录中。dataset 的命名为`WaveformIdeal`。
+`superimpose.py  `读取 `SPE.H5` 与 `PE-info.h5` 生成 `ideal-waveform.h5`，同学们生成的文件中，对于每一个 Event $i$，应该包含对应 Channel 数目 $N_i \le 30$ 的波形，写成一个大小为 $N_i *1029$ 的矩阵，存入HDF5 文件的 `WaveformIdeal` dataset 中。对于 Event $i$，它在 HDF5 文件中的位置为 `/WaveformIdeal/Eventi`。
 
-`plot-ideal.py` 读取 `ideal-waveform.h5` 和 `SPE.H5`，在同一张图上画出两个图像（subplot），第一张图为单光电子波形 `SPE`，第二张图上绘制指定的 channel 的波形。注意标注横纵坐标的标签、图的标题。图的文件名命名为 `ideal-waveform.png`。
+`plot-ideal.py` 读取 `ideal-waveform.h5` 和 `SPE.H5`，在同一张图上画出两个图像（subplot），第一张图为单光电子波形 `SPE`，第二张图上绘制指定的 Channel 和 EventID 的波形。注意标注横纵坐标的标签、图的标题。图的文件名命名为 `ideal-waveform.png`。
 
-`noise-sample.py` 读取 `noise-level.csv` 生成 `noise.h5`，同学们生成的文件中应该包含对应channel 数目 $N$ 的波形，写成一个大小为 $N*1029​$ 的矩阵，以 dataset 存入 `noise.h5` 文件中，dataset的命名为 `Noise`。生成 noise 的思路**必须**写入实验报告中。我们提供了 `data/noise_example.h5` 以供参考，但你不能直接使用其中的数据。
+`noise-sample.py` 读取 `noise-level.csv` 生成 `noise.h5`，同学们生成的文件中应该包含对应 channel 数目 $N_i \le 30$ 的波形，写成一个大小为 $N*1029$ 的矩阵，存入HDF5 文件的 `Noise` dataset 中。对于 Event $i​$，它在 HDF5 文件中的位置为 `/Noise/Eventi`。生成 noise 的思路**必须**写入实验报告中。我们提供了 `data/noise_example.h5` 以供参考，但它的格式并不符合要求，你也不能直接使用其中的数据。
 
-`plot-noise.py` 读取 `noise.hdf5` 并绘制图象，内容为指定的 channel 的噪声波形。注意标注横纵坐标的标签、图的标题。图的文件名命名为 `noise.png`。
+`plot-noise.py` 读取 `noise.hdf5` 并绘制图象，内容为指定的 Channel 和 EventID 的噪声波形。注意标注横纵坐标的标签、图的标题。图的文件名命名为 `noise.png`。
 
-`add-noise.py` 读取 `ideal-waveform.h5` 和 `noise.h5` 生成`waveform.h5`，进行叠加处理后，以dataset存入HDF5文件的根目录中。dataset的命名为`waveformNoise`。
+`add-noise.py` 读取 `ideal-waveform.h5` 和 `noise.h5` 生成`waveform.h5`，进行叠加处理后，以dataset存入 HDF5 文件的根目录中。dataset的命名为`waveformNoise`。
 
-`plot-real.py` 读取 `ideal-waveform.h5` 和 `waveform.h5`，并同一张图上画出两个图像。你需要读取我们指定的 channel 数据，第一张图为无噪声波形，第二张图上绘制对应 channel 的有噪声波形。注意标注横纵坐标的标签，图的标题。图的文件名命名为`waveform.png`.
+`plot-real.py` 读取 `ideal-waveform.h5` 和 `waveform.h5`，并同一张图上画出两个图像，第一张图为无噪声波形，第二张图上绘制指定 Channel 和 EventID 的有噪声波形。注意标注横纵坐标的标签，图的标题。图的文件名命名为`waveform.png`。
 
 ### 提高要求
 
