@@ -83,15 +83,19 @@ $$
 | add-noise.py    | 16   |
 | plot-real.py    | 8    |
 
-`superimpose.py`读取 `SPE.H5` 与 `PE-info.h5` 生成 `ideal-waveform.h5`，同学们生成的文件中，对于每一个 Event $i$，应该包含对应 Channel 数目 $N_i \le 30$ 的波形，写成一个大小为 $N_i *1029$ 的矩阵，存入HDF5 文件的 `WaveformIdeal` dataset 中。对于 Event $i$，它在 HDF5 文件中的位置为 `/WaveformIdeal/Eventi`。
+`superimpose.py`读取 `SPE.H5` 与 `PE-info.h5` 生成 `ideal-waveform.h5`，同学们生成的文件中，对于每一个 Event $i$，应该包含对应 Channel 数目 $N_i \le 30$ 的波形，写成一个大小为 $N_i *1029$ 的矩阵，存入HDF5 文件的 `WaveformIdeal` dataset 中，对应位置为 `/WaveformIdeal` 。对于 Event $i$ 和 Data $i$ ,同样存成对应的 dataset , 分别对应在 HDF5 文件中的位置为 `/EventID` 和 `/ChannelID`。
 
 `plot-ideal.py` 读取 `ideal-waveform.h5` 和 `SPE.h5`，在同一张图上画出两个图像（subplot），第一张图为单光电子波形 `SPE`，第二张图上绘制指定的 Channel 和 EventID 的波形。注意标注横纵坐标的标签、图的标题。图的文件名命名为 `ideal-waveform.png`。
 
-`noise-sample.py` 读取 `noise-level.csv` 生成 `noise.h5`，同学们生成的文件中应该包含对应 channel 数目 $N_i \le 30$ 的波形，写成一个大小为 $N*1029$ 的矩阵，存入HDF5 文件的 `Noise` dataset 中。对于 Event $i​$，它在 HDF5 文件中的位置为 `/Noise/Eventi`。生成 noise 的思路**必须**写入实验报告中。我们提供了 `data/noise_example.h5` 以供参考，但它的格式并不符合要求，你也不能直接使用其中的数据。
+`noise-sample.py` 读取 `noise-level.csv` 生成 `noise.h5`，同学们生成的文件中应该包含对应 channel 数目 $N_i \le 30$ 的波形，写成一个大小为 $N*1029$ 的矩阵，存入HDF5 文件的 `Noise` dataset 中,对应位置为 `/Noise` 。对于 Event $i$ 和 Data $i$ ,同样存成对应的 dataset , 分别对应在 HDF5 文件中的位置为 `/EventID` 和 `/ChannelID`。
+
+生成 noise 的思路**必须**写入实验报告中。我们提供了 `data/noise_example.h5` 以供参考，但它的格式并不符合要求，你也不能直接使用其中的数据。
 
 `plot-noise.py` 读取 `noise.h5` 并绘制图象，内容为指定的 Channel 和 EventID 的噪声波形。注意标注横纵坐标的标签、图的标题。图的文件名命名为 `noise.png`。
 
-`add-noise.py` 读取 `ideal-waveform.h5` 和 `noise.h5` 生成`waveform.h5`，进行叠加处理后，以dataset存入 HDF5 文件的根目录中。dataset的命名为`waveformNoise`。
+`add-noise.py` 读取 `ideal-waveform.h5` 和 `noise.h5` 生成`waveform.h5`，进行叠加处理后，以dataset存入 HDF5 文件的根目录中。dataset的命名为`waveformNoise`,对应位置为 `/WaveformNoise` 。对于 Event $i$ 和 Data $i$ ,同样存成对应的 dataset , 分别对应在 HDF5 文件中的位置为 `/EventID` 和 `/ChannelID`。
+
+你应该注意到产生的文件中所有 `EventID` 和 `ChannelID` 对应的 dataset 是一模一样的，这样存储的好处便于通过 `EventID` 和 `ChannelID` 去索引对应的 waveform，同时也方便大家的画图任务。
 
 `plot-real.py` 读取 `ideal-waveform.h5` 和 `waveform.h5`，并同一张图上画出两个图像，第一张图为无噪声波形，第二张图上绘制指定 Channel 和 EventID 的有噪声波形。注意标注横纵坐标的标签，图的标题。图的文件名命名为`waveform.png`。
 
