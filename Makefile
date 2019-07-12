@@ -19,7 +19,7 @@ noise.h5: data/noise-level.csv
 
 # 绘制某一个 channel 的噪音
 noise.png: noise.h5
-	python3 plot-ideal.py $(CHANNEL) $^ $@
+	python3 plot-noise.py $(CHANNEL) $^ $@
 
 # waveform.h5 是最终的光电倍境管波型输出
 waveform.h5: ideal-waveform.h5 noise.h5
@@ -27,4 +27,4 @@ waveform.h5: ideal-waveform.h5 noise.h5
  
 # 绘制某个 channel 的波形（添加噪声前后）
 waveform.png: ideal-waveform.h5 waveform.h5
-	python3 plot-result.py $(CHANNEL) $^ $@
+	python3 plot-real.py $(CHANNEL) $^ $@

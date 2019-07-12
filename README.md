@@ -18,7 +18,7 @@ $$
 
 ![h(t)](data/SPEResponse.png)
 
-你的任务就是重复上述的物理过程，将输入的入射光子波形x(t)转化成最后的波形。
+你的任务就是重复上述的物理过程，将输入的入射光子波形x(t)转化成最后的波形。一个说明性的图示可见 `pipeline.pdf`。
 
 ## 数据说明
 
@@ -79,19 +79,19 @@ $$
 | noise-sample.py | 16   |
 | plot-noise.py   | 8    |
 | add-noise.py    | 16   |
-| plot-result.py  | 8    |
+| plot-real.py    | 8    |
 
 `superimpose.py  `读取 `SPE.H5` 与 `PE-info.h5` 生成 `ideal-waveform.h5`，同学们生成的文件中应该包含对应 channel 数目 $N​$ 的波形，写成一个大小为 $N*1029​$ 的矩阵，以 dataset 存入HDF5文件的根目录中。dataset 的命名为`WaveformIdeal`。
 
 `plot-ideal.py` 读取 `ideal-waveform.h5` 和 `SPE.H5`，在同一张图上画出两个图像（subplot），第一张图为单光电子波形 `SPE`，第二张图上绘制指定的 channel 的波形。注意标注横纵坐标的标签、图的标题。图的文件名命名为 `ideal-waveform.png`。
 
-`noise-sample.py` 读取 `noise-level.csv` 生成 `noise.h5`，同学们生成的文件中应该包含对应channel 数目 $N$ 的波形，写成一个大小为 $N*1029​$ 的矩阵，以 dataset 存入 `noise.hdf5` 文件中，dataset的命名为 `Noise` 。生成 noise 的思路**必须**写入实验报告中。
+`noise-sample.py` 读取 `noise-level.csv` 生成 `noise.h5`，同学们生成的文件中应该包含对应channel 数目 $N$ 的波形，写成一个大小为 $N*1029​$ 的矩阵，以 dataset 存入 `noise.h5` 文件中，dataset的命名为 `Noise`。生成 noise 的思路**必须**写入实验报告中。我们提供了 `data/noise_example.h5` 以供参考，但你不能直接使用其中的数据。
 
 `plot-noise.py` 读取 `noise.hdf5` 并绘制图象，内容为指定的 channel 的噪声波形。注意标注横纵坐标的标签、图的标题。图的文件名命名为 `noise.png`。
 
 `add-noise.py` 读取 `ideal-waveform.h5` 和 `noise.h5` 生成`waveform.h5`，进行叠加处理后，以dataset存入HDF5文件的根目录中。dataset的命名为`waveformNoise`。
 
-`plot-result.py` 读取 `ideal-waveform.h5` 和 `waveform.h5`，并同一张图上画出两个图像。你需要读取我们指定的 channel 数据，第一张图为无噪声波形，第二张图上绘制对应 channel 的有噪声波形。注意标注横纵坐标的标签，图的标题。图的文件名命名为`waveform.png`.
+`plot-real.py` 读取 `ideal-waveform.h5` 和 `waveform.h5`，并同一张图上画出两个图像。你需要读取我们指定的 channel 数据，第一张图为无噪声波形，第二张图上绘制对应 channel 的有噪声波形。注意标注横纵坐标的标签，图的标题。图的文件名命名为`waveform.png`.
 
 ### 提高要求
 
