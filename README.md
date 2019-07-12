@@ -83,7 +83,7 @@ $$
 | add-noise.py    | 16   |
 | plot-real.py    | 8    |
 
-在做下面任务前，你可能需要参考 [structured arrays](https://docs.scipy.org/doc/numpy-1.16.0/user/basics.rec.html)
+在做下面任务前，你可能需要参考 [structured arrays](https://docs.scipy.org/doc/numpy-1.16.0/user/basics.rec.html)。
 
 `superimpose.py`读取 `SPE.H5` 与 `PE-info.h5` 生成 `ideal-waveform.h5`，同学们生成的文件中，对于每一个 Event $i$，应该包含对应 Channel 数目 $N_i \le 30$ 的波形，EventID 和 ChannelID, 因此你需要构造一个新的dtype，此处记为 NEWTYPE ,写成一个大小为 $N_i *NEWTYPE$ 的矩阵，存入HDF5 文件的 `WaveformIdeal` dataset 中，对应位置为 `/WaveformIdeal` 。dataset对应的结构如下表
 
@@ -102,7 +102,7 @@ $$
 
 `plot-ideal.py` 读取 `ideal-waveform.h5` 和 `SPE.h5`，在同一张图上画出两个图像（subplot），第一张图为单光电子波形 `SPE`，第二张图上绘制指定的 Channel 和 EventID 的波形。注意标注横纵坐标的标签、图的标题。图的文件名命名为 `ideal-waveform.png`。
 
-`noise-sample.py` 读取 `noise-level.csv` 生成 `noise.h5`，同学们生成的文件中应该包含对应 channel 数目 $N_i \le 30$ 的波形，EventID 和 ChannelID, 因此你需要构造一个新的dtype，此处记为 NEWTYPE ,写成一个大小为 $N_i *NEWTYPE$ 的矩阵，，存入HDF5 文件的 `Noise` dataset 中,对应位置为 `/Noise` 。
+`noise-sample.py` 读取 `noise-level.csv` 生成 `noise.h5`，同学们生成的文件中应该包含对应 channel 数目 $N_i \le 30$ 的波形，EventID 和 ChannelID, 因此你需要构造一个新的dtype，此处记为 NEWTYPE ,写成一个大小为 $N_i *NEWTYPE$ 的矩阵，存入HDF5 文件的 `Noise` dataset 中，对应位置为 `/Noise` 。
 
 生成 noise 的思路**必须**写入实验报告中。我们提供了 `data/noise_example.h5` 以供参考，但它的格式并不符合要求，你也不能直接使用其中的数据。
 
