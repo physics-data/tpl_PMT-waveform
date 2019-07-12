@@ -74,7 +74,7 @@ $$
 
 | 任务（程序名）  | 分数 |
 | --------------- | ---- |
-| superimpose.py  | 30   |
+| superimpose.py  | 24   |
 | plot-ideal.py   | 8    |
 | noise-sample.py | 16   |
 | plot-noise.py   | 8    |
