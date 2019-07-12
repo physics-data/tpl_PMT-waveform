@@ -29,3 +29,10 @@ waveform.h5: ideal-waveform.h5 noise.h5
 # 绘制某个 channel 的波形（添加噪声前后）
 waveform.png: ideal-waveform.h5 waveform.h5
 	python3 plot-real.py $(CHANNEL) $(EVENT_ID) $^ $@
+
+
+# Delete partial files when the processes are killed.
+.DELETE_ON_ERROR:
+# Keep intermediate files around
+.SECONDARY:
+
