@@ -22,7 +22,7 @@ noise.h5: data/noise-level.csv data/PE-info.h5
 noise.png: noise.h5
 	python3 plot-noise.py $(CHANNEL) $(EVENT_ID) $^ $@
 
-# waveform.h5 是最终的光电倍境管波型输出
+# waveform.h5 是最终的光电倍增管波型输出
 waveform.h5: ideal-waveform.h5 noise.h5
 	python3 add-noise.py $^ $@
  
