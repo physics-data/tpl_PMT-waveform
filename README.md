@@ -50,9 +50,9 @@ $$
 | 3       | 29        | 276    | 1      |
 | 3       | 29        | 306    | 1      |
 
-其中第一列是 `EventID` 记录事件数，第二列 `ChannelID` 记录通道数，每一个事件对应有 $N = 30​$ 个通道（PMT），因为实际探测过程中有 30 个PMT在工作，而每个PMT记录到的对应光子数实际上可能有多个。
+其中第一列是 `EventID` 记录事件数，第二列 `ChannelID` 记录通道数，每一个事件对应有 $N = 30$ 个通道（PMT）。实际探测过程中有 30 个 PMT 在工作，而每个PMT记录到的对应光子数实际上可能有多个。
 
-需要注意的是，某个事件中，并不是所有 Channel 都有记录，所以某个事件中可能不足30个PMT 的 Channel。你不必计算那些没有记录的 Channel。
+需要注意的是，某个事件中并不是所有 Channel 都有记录，所以某个事件中可能不足30个PMT 的 Channel。你不必关注那些没有记录的 Channel。
 
 第三列 `PETime` 是光子入射时间，第四列 `Weight` 是权重，提供的样例数据中给出的权重是1，实际最后测试时使用的数据并不一定是1，可能是其它值。你需要将权重乘在单光电子响应 $h(t)​$ 上，得到该探测器上得到的实际响应。
 
@@ -85,41 +85,54 @@ $$
 
 在做下面任务前，你可能需要参考 [structured arrays](https://docs.scipy.org/doc/numpy-1.16.0/user/basics.rec.html)。
 
-`superimpose.py`读取 `SPE.H5` 与 `PE-info.h5` 生成 `ideal-waveform.h5`，同学们生成的文件中，对于每一个 Event $i$，应该包含对应 Channel 数目 $N_i \le 30$ 的波形，EventID 和 ChannelID, 因此你需要构造一个新的dtype，此处记为 NEWTYPE ,写成一个大小为 $N_i *NEWTYPE$ 的矩阵，存入HDF5 文件的 `WaveformIdeal` dataset 中，对应位置为 `/WaveformIdeal` 。dataset对应的结构如下表
+#### `superimpose.py `
 
-| EventID | ChannelID | Waveform    |
-| ------- | --------- | ---------   |
-| 1       | 0         | 1029*int    |
-| 1       | 1         | 1029*int    |
-| 1       | 2         | 1029*int    |
-| 1       | 3         | 1029*int    |
-| ...     | ...       | ...         |
-| 1       | 28        | 1029*int    |
-| 1       | 29        | 1029*int    |
-| 2       | 0         | 1029*int    |
-| 2       | 1         | 1029*int    |
-| 2       | 2         | 1029*int    |
+读取 `SPE.H5` 与 `PE-info.h5` 生成 `ideal-waveform.h5`，对于每一个 Event $i$，应该包含对应 Channel 数目 $N_i \le 30​$ 的波形数据（长度规定为 1029 ns）。因此你需要构造一个新的数据类型，写入 HDF5 文件的 `WaveformIdeal` dataset 中，对应的表结构如下：
 
-`plot-ideal.py` 读取 `ideal-waveform.h5` 和 `SPE.h5`，在同一张图上画出两个图像（subplot），第一张图为单光电子波形 `SPE`，第二张图上绘制指定的 Channel 和 EventID 的波形。注意标注横纵坐标的标签、图的标题。图的文件名命名为 `ideal-waveform.png`。
+| EventID | ChannelID | Waveform |
+| ------- | --------- | -------- |
+| 1       | 0         | 1029*int |
+| 1       | 1         | 1029*int |
+| 1       | 2         | 1029*int |
+| 1       | 3         | 1029*int |
+| ...     | ...       | ...      |
+| 1       | 28        | 1029*int |
+| 1       | 29        | 1029*int |
+| 2       | 0         | 1029*int |
+| 2       | 1         | 1029*int |
+| 2       | 2         | 1029*int |
+| ...     | ...       | ...      |
 
-`noise-sample.py` 读取 `noise-level.csv` 生成 `noise.h5`，同学们生成的文件中应该包含对应 channel 数目 $N_i \le 30$ 的波形，EventID 和 ChannelID, 因此你需要构造一个新的dtype，此处记为 NEWTYPE ,写成一个大小为 $N_i *NEWTYPE$ 的矩阵，存入HDF5 文件的 `Noise` dataset 中，对应位置为 `/Noise` 。
+#### `plot-ideal.py`
+
+读取 `ideal-waveform.h5` 和 `SPE.h5`，在同一张图上画出两个图像（subplot），第一张图为单光电子波形 `SPE`，第二张图上绘制指定的 Channel 和 EventID 的波形。注意标注横纵坐标的标签、图的标题。图的文件名命名为 `ideal-waveform.png`。
+
+#### `noise-sample.py`
+
+读取 `noise-level.csv` 与 `PE-info.h5` 生成 `noise.h5`，生成的HDF5 文件结构应该和 `ideal-waveform.h5` 一致，存入 `Noise` dataset 中 。
 
 生成 noise 的思路**必须**写入实验报告中。我们提供了 `data/noise_example.h5` 以供参考，但它的格式并不符合要求，你也不能直接使用其中的数据。
 
-`plot-noise.py` 读取 `noise.h5` 并绘制图象，内容为指定的 Channel 和 EventID 的噪声波形。注意标注横纵坐标的标签、图的标题。图的文件名命名为 `noise.png`。
+#### `plot-noise.py`
 
-`add-noise.py` 读取 `ideal-waveform.h5` 和 `noise.h5` 生成`waveform.h5`，进行叠加处理后，以dataset存入 HDF5 文件的根目录中。dataset的命名为`waveformNoise`,对应位置为 `/WaveformNoise` 。dataset 的结构和上述的 h5 文件结构一致。
+读取 `noise.h5` 并绘制图象，内容为指定的 Channel 和 EventID 的噪声波形。注意标注横纵坐标的标签、图的标题。图的文件名命名为 `noise.png`。
 
-你应该注意到产生的文件中所有 `EventID` 和 `ChannelID`  是一模一样的，这样存储的好处便于通过 `EventID` 和 `ChannelID` 去索引对应的 waveform，同时也方便大家的画图任务。
+#### `add-noise.py`
 
-`plot-real.py` 读取 `ideal-waveform.h5` 和 `waveform.h5`，并同一张图上画出两个图像，第一张图为无噪声波形，第二张图上绘制指定 Channel 和 EventID 的有噪声波形。注意标注横纵坐标的标签，图的标题。图的文件名命名为`waveform.png`。
+读取 `ideal-waveform.h5` 和 `noise.h5` 生成 `waveform.h5`，进行叠加处理后，以dataset存入 HDF5 文件的 `waveformNoise` dataset 中，结构和上述的两个 h5 文件结构一致。
+
+你应该注意到产生的三个 HDF5 文件中所有 `EventID` 和 `ChannelID`  是相同的，这样存储的好处是便于通过 `EventID` 和 `ChannelID` 去索引对应的 waveform，同时也方便大家的画图任务。
+
+#### `plot-real.py`
+
+读取 `ideal-waveform.h5` 和 `waveform.h5`，并同一张图上画出两个图像，第一张图为指定 Channel 和 EventID 的无噪声波形，第二张图上绘制有噪声波形。注意标注横纵坐标的标签，图的标题。图的文件名命名为`waveform.png`。
 
 ### 提高要求
 
 提高要求为加分项，至多可加 20 分。你可以自由发挥，一些可选项为：
 
 * 在程序运行过程中输出友好的提示信息（如处理进度）
-* 增强程序的鲁棒性，添加完善的错误处理（如文件格式不正确、不存在文件等）
+* 增强程序的鲁棒性，添加完善的错误处理（如文件格式不正确、不存在文件、不存在对应波形等）
 * 测试程序在较大规模数据上的性能，并尝试优化
 
 如果你实现了任何提高要求，请在实验报告中详细说明你的工作，这将作为评分的依据。
