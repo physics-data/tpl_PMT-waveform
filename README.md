@@ -103,7 +103,7 @@ $$
 | 2       | 2         | 1029*float |
 | ...     | ...       | ...        |
 
-你需要注意 `EventID` `ChannelID`的数据格式，在生成文件中要保持和输入文件一致，分别为`int64` 和 `int16`，而`Waveform` 是 `float`类型的 `(1029,)`数组。
+你需要注意 `EventID` 和 `ChannelID`的数据格式，在生成文件中要保持和输入文件一致，分别为`int64` 和 `int16`，而`Waveform` 是 `float` 类型的形状为 `(1029,)` 数组。
 
 #### `plot-ideal.py`
 
