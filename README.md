@@ -50,7 +50,7 @@ $$
 | 3       | 29        | 276    | 1      |
 | 3       | 29        | 306    | 1      |
 
-其中第一列是 `EventID` 记录事件数，第二列 `ChannelID` 记录通道数，每一个事件对应有 $N = 30$ 个通道（PMT）。实际探测过程中有 30 个 PMT 在工作，而每个PMT记录到的对应光子数实际上可能有多个。
+其中第一列是 `EventID` 记录事件数，第二列 `ChannelID` 记录通道数，每一个事件对应有 $N = 30$ 个通道（PMT）。实际探测过程中有 30 个 PMT 在工作，而每个PMT记录到的对应光子数实际上可能有多个。你需要注意 `EventID` `ChannelID`的数据格式，在生成文件中要保持一致。
 
 需要注意的是，某个事件中并不是所有 Channel 都有记录，所以某个事件中可能不足30个PMT 的 Channel。你不必关注那些没有记录的 Channel。
 
@@ -89,19 +89,27 @@ $$
 
 读取 `SPE.h5` 与 `PE-info.h5` 生成 `ideal-waveform.h5`，对于每一个 Event $i$，应该包含对应 Channel 数目 $N_i \le 30​$ 的波形数据（长度规定为 1029 ns）。因此你需要构造一个新的数据类型，写入 HDF5 文件的 `WaveformIdeal` dataset 中，对应的表结构如下：
 
-| EventID | ChannelID | Waveform |
-| ------- | --------- | -------- |
-| 1       | 0         | 1029*int |
-| 1       | 1         | 1029*int |
-| 1       | 2         | 1029*int |
-| 1       | 3         | 1029*int |
-| ...     | ...       | ...      |
-| 1       | 28        | 1029*int |
-| 1       | 29        | 1029*int |
-| 2       | 0         | 1029*int |
-| 2       | 1         | 1029*int |
-| 2       | 2         | 1029*int |
-| ...     | ...       | ...      |
+| EventID | ChannelID | Waveform   |
+| ------- | --------- | ---------- |
+| 1       | 0         | 1029*int16 |
+| 1       | 1         | 1029*int16 |
+| 1       | 2         | 1029*int16 |
+| 1       | 3         | 1029*int16 |
+| ...     | ...       | ...        |
+| 1       | 28        | 1029*int16 |
+| 1       | 29        | 1029*int16 |
+| 2       | 0         | 1029*int16 |
+| 2       | 1         | 1029*int16 |
+| 2       | 2         | 1029*int16 |
+| ...     | ...       | ...        |
+
+你需要注意 `EventID` `ChannelID`的数据格式，在生成文件中要保持和输入文件一致，分别为`int64` 和 `int16`。此外你需要注意 `Waveform` 内部的数据是 `int16` 和 `SPE.h5` 中有差别，原因在于 ADC 采样时有采样误差。
+
+**但是由于此处产生的仅仅是理想波形，所以此处 `Waveform` 仍然使用浮点数存储即可。**
+
+| EventID | ChannelID | Waveform   |
+| ------- | --------- | ---------- |
+| int64   | int16     | 1029*float |
 
 #### `plot-ideal.py`
 
@@ -110,6 +118,12 @@ $$
 #### `noise-sample.py`
 
 读取 `noise-level.csv` 与 `PE-info.h5` 生成 `noise.h5`，生成的HDF5 文件结构应该和 `ideal-waveform.h5` 一致，存入 `Noise` dataset 中 。
+
+| EventID | ChannelID | Waveform   |
+| ------- | --------- | ---------- |
+| int64   | int16     | 1029*float |
+
+**此处不需要考虑 ADC 采样误差，同学按照正常的浮点数存储即可。**
 
 生成 noise 的思路**必须**写入实验报告中。我们提供了 `data/noise_example.h5` 以供参考，但它的格式并不符合要求，你也不能直接使用其中的数据。
 
@@ -120,6 +134,12 @@ $$
 #### `add-noise.py`
 
 读取 `ideal-waveform.h5` 和 `noise.h5` 生成 `waveform.h5`，进行叠加处理后，以dataset存入 HDF5 文件的 `waveformNoise` dataset 中，结构和上述的两个 h5 文件结构一致。
+
+| EventID | ChannelID | Waveform   |
+| ------- | --------- | ---------- |
+| int64   | int16     | 1029*int16 |
+
+由于 ADC 采样时有采样误差，所以此处需要体现出真实的物理过程。这个时候务必将 `Waveform` 的数据格式按照 `int16` 储存，因为它被作为最终的模拟结果，需要体现出 ADC 的采样误差。
 
 你应该注意到产生的三个 HDF5 文件中所有 `EventID` 和 `ChannelID`  是相同的，这样存储的好处是便于通过 `EventID` 和 `ChannelID` 去索引对应的 waveform，同时也方便大家的画图任务。
 
