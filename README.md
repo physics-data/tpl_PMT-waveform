@@ -107,6 +107,8 @@ $$
 
 **但是由于此处产生的仅仅是理想波形，所以此处 `Waveform` 仍然使用浮点数存储即可。**
 
+对应的表的结构和数据类型如下：
+
 | EventID | ChannelID | Waveform   |
 | ------- | --------- | ---------- |
 | int64   | int16     | 1029*float |
@@ -118,6 +120,8 @@ $$
 #### `noise-sample.py`
 
 读取 `noise-level.csv` 与 `PE-info.h5` 生成 `noise.h5`，生成的HDF5 文件结构应该和 `ideal-waveform.h5` 一致，存入 `Noise` dataset 中 。
+
+对应的表的结构和数据类型如下：
 
 | EventID | ChannelID | Waveform   |
 | ------- | --------- | ---------- |
@@ -134,6 +138,8 @@ $$
 #### `add-noise.py`
 
 读取 `ideal-waveform.h5` 和 `noise.h5` 生成 `waveform.h5`，进行叠加处理后，以dataset存入 HDF5 文件的 `waveformNoise` dataset 中，结构和上述的两个 h5 文件结构一致。
+
+对应的表的结构和数据类型如下：
 
 | EventID | ChannelID | Waveform   |
 | ------- | --------- | ---------- |
